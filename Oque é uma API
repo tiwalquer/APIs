@@ -1,0 +1,8 @@
+Antes de entrar ja criando APIs temos que entender oque elas sao. API é um acronimo para (Application Programming Interface). APIs sao pontes de comunicacao entre diferentes softwares, elas conectao voces, 
+permitindo a troca de informacoes e funcionalidades. E dentre as suas vantagens estao a reutilizacao de codigo e funcionalidades, escalabilidade e manutencao. O tipo de API que eu irei tratar sera o tipo REST, que
+usa HTTP, é um protocolo para transportar informacoes e realizar acoes basicas necessarios Exemplo CRUD. porem existem outros tipos de API como o GraphQL. 
+Para acessar as APIs sao utilizas URls que sao por exemplo quando voce abre o seu navegador de uma olhada no link que tem na barra de pesquisa, nele esta muito provavelmente HTTPS( tipo o HTTP porem com mais 
+seguranca), usando IP por exemplo para estabelecer uma coneccao confiavel, atraves do que pode vir logo em seguida o WWW( world wide web ) que sao uma grande biblioteca de varios documentos que podem ser acessados
+na internet, e em seguida ou mesmo apos o '://', vem o local/ site que vc quer acessar o nome escolhido do local, o endereco da onde vc deseja acessar, que tambem pode estar acompanhado por um ' . ' algo 
+geralmente ' .com ' que o tipo de dominio. E apos isso vem o caminho que nos queremos, oque a gente quer do sitema. Pode vir, no nosso caso vira o '/API/' , nem todo site que é API possui o /API/ mas é convencional
+a utilizacao. E apos isso vem mais alguma coisa para chegar no lugar desejado, funcionalidade/dado. Tudo isso que a gente viu é um endPoint ou URL (endpoint exclusivo de API. URl geral) 
