@@ -1,0 +1,66 @@
+1: Primeiramente nos precisamos baixar o NODE.js e npm por meio desse link (https://nodejs.org (versão LTS)) 
+realize a verificacao se foi estalado corretamente no CMD, utilizando do comando  ( node --version e npm --version ) 
+
+2: e de algum editor de codigo eu utilizarei do VScode, é gratuito e muito bom
+
+3: uma ferramenta para testar as APIs
+por exemplo o postMan seguei link para download (https://www.postman.com)
+
+4: agora botando a mao na massa, voce pode criar pelo VS code direto ou pelo CMD
+  mkdir minha-primeira-api //Criar pasta do projeto
+  cd minha-primeira-api //entra no diretorio 
+
+  //caso VS - va no terminal do proprio VS
+  npm  init -y //comeca a funcionar o NODE.js
+
+  npm install express //Instalar Express (framework web)
+
+  npm install --save-dev nodemon //Instalar nodemon (reinicia automático)
+
+  //caso esteja no CMD do proprio pc
+  touch index.js //Criar arquivo principal
+  
+  code . //abre o VS code
+
+tem que possuir esses arquivos
+minha-primeira-api/
+├── node_modules/
+├── index.js
+├── package.json
+└── package-lock.json
+-------------------------------------------------------------------
+Apos isso no arquivo index.js, sera aonde nos iremos construir a nossa API, seguie um codigo pronto de uma API simples
+// 1. Importar Express
+const express = require('express');
+
+// 2. Criar aplicação
+const app = express();
+
+// 3. Definir porta
+const PORT = 3000;
+
+// 4. Middleware para JSON
+app.use(express.json());
+
+// 5. Criar primeiro endpoint
+app.get('/', (req, res) => {
+    res.json({
+        mensagem: '🎉 Minha primeira API funcionando!',
+        status: 'sucesso',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// 6. Endpoint de informações
+app.get('/info', (req, res) => {
+    res.json({
+        nome: 'Minha API REST', // pode realizar mudancas aqui
+        versao: '1.0.0',
+        autor: 'Seu Nome'
+    });
+});
+
+// 7. Iniciar servidor
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+});
