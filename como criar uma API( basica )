@@ -64,3 +64,7 @@ app.get('/info', (req, res) => {
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });
+
+
+Para testa-la voce pode ou colar no navegador o http://localhost:3000 ou no postman ( create a new request: GET) e inserir na barra que pede uma URL a sua URL: http://localhost:3000 
+voce tambem pode testar no final da URL ( 3000) colocar um '/info' para imprimir mais informacoes 
