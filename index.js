@@ -7,10 +7,6 @@ const app = express();
 app.use(express.json());
 // Agora podemos usar 'db' nas rotas!
 
-//const db = new Database('locadoraTiagao.db');
-
-
-
 app.listen(3001, () => console.log('🚀 API na porta 3001'));
 
 
@@ -20,8 +16,8 @@ app.post('/api/locadoraTiagao', (req, res) => { //essa é a minha rota/URL
         // 1. Pegar dados do body
         const { nome, preco, genero, estoque = 0 } = req.body;
         
-        // 2. Validações (igual antes!)
-        if (!nome || !preco || !genero) {
+        // 2. Validações
+        if (!nome || !preco || !genero) { //tem que ter valor
             return res.status(400).json({ erro: 'Campos obrigatórios faltando' });
         }
         
@@ -29,6 +25,11 @@ app.post('/api/locadoraTiagao', (req, res) => { //essa é a minha rota/URL
             return res.status(400).json({  erro: 'Preço inválido' });
         }
         
+        if(typeof estoque !== 'number' || estoque < 0){
+            return res.status(400).json({ erro: 'quantidade invalida' });
+        }
+
+
         // 3. Preparar INSERT
         const stmt = db.prepare(`
             INSERT INTO locadoraTiagao (nome, preco, genero, estoque)
@@ -55,25 +56,112 @@ app.post('/api/locadoraTiagao', (req, res) => { //essa é a minha rota/URL
 });
 
 
-
-
-
-// GET /api/locadoraTiagao - Listar todos
-app.get('/api/locadoraTiagao', (req, res) => {
+app.get('/api/locadoraTiagao', async (req, res) => {
     try {
-        // Preparar query
-        const stmt = db.prepare('SELECT * FROM locadoraTiagao');
-        
-        // Executar e pegar todos os resultados
-        const locadoraTiagao = stmt.all();
-        
-        // Retornar array (pode ser vazio [])
-        res.json(locadoraTiagao);
+        const queryData = buildQuery(req.query);
+
+        const total = await getTotal(queryData);
+        const produtos = await getProdutos(queryData, req.query);
+
+        const response = buildResponse(produtos, total, req.query);
+
+        res.json(response);
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ erro: 'Erro ao buscar locadoraTiagao' });
+        res.status(500).json({ erro: 'Erro na busca' });
     }
 });
+
+function buildQuery(query) {
+    let sql = 'SELECT * FROM locadoraTiagao WHERE 1=1';
+    const params = [];
+
+    // Filtro por gênero
+    if (query.genero) {
+        sql += ` AND (
+            genero = ?
+            OR genero LIKE ?
+            OR genero LIKE ?
+            OR genero LIKE ?
+        )`;
+
+        params.push(query.genero);
+        params.push(`${query.genero}/%`);
+        params.push(`%/${query.genero}`);
+        params.push(`%/${query.genero}/%`);
+    }
+
+    // Filtro por preço
+    if (query.preco_max) {
+        sql += ' AND preco <= ?';
+        params.push(parseFloat(query.preco_max));
+    }
+
+    if (query.preco_min) {
+        sql += ' AND preco >= ?';
+        params.push(parseFloat(query.preco_min));
+    }
+
+    // ORDER BY 
+    if (query.ordem) {
+        const camposValidos = ['nome', 'preco', 'genero', 'created_at'];
+
+        if (camposValidos.includes(query.ordem)) {
+            sql += ` ORDER BY ${query.ordem}`;
+
+            if (query.direcao === 'desc') {
+                sql += ' DESC';
+            } else {
+                sql += ' ASC';
+            }
+        }
+    }
+
+    return { sql, params };
+}
+
+async function getTotal({ sql, params }) {
+    const countSql = `SELECT COUNT(*) as total FROM (${sql})`;
+    const row = db.prepare(countSql).get(...params);
+    return row.total;
+}
+
+async function getProdutos({ sql, params }, query = {}) {
+    let finalSql = sql;
+    const finalParams = [...params];
+
+    const limite = parseInt(query.limite) || null;
+    const pagina = parseInt(query.pagina) || 1;
+
+    if (limite) {
+        const offset = (pagina - 1) * limite;
+        finalSql += ' LIMIT ? OFFSET ?';
+        finalParams.push(limite, offset);
+    }
+
+    return db.prepare(finalSql).all(...finalParams);
+}
+
+function buildResponse(produtos, total, query) {
+    if (!query.limite) {
+        return produtos;
+    }
+
+    const limite = parseInt(query.limite);
+    const pagina = parseInt(query.pagina) || 1;
+
+    return {
+        dados: produtos,
+        paginacao: {
+            pagina_atual: pagina,
+            itens_por_pagina: limite,
+            total_itens: total,
+            total_paginas: Math.ceil(total / limite)
+        }
+    };
+}
+
 
 // PUT /api/locadoraTiagao/:id - Atualizar filme
 app.put('/api/locadoraTiagao/:id', (req, res) => {
@@ -106,6 +194,10 @@ app.put('/api/locadoraTiagao/:id', (req, res) => {
             return res.status(400).json({ 
                 erro: 'Preço inválido' 
             });
+        }
+        
+        if(typeof estoque !== 'number' || estoque < 0){
+            return res.status(400).json({ erro: 'quantidade invalida' });
         }
         
         // 5. Executar UPDATE
