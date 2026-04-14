@@ -1,0 +1,150 @@
+segui aqui o codigo para ter uma API , CRUD sem banco de dados 
+
+
+
+const express = require('express');
+const app = express();
+
+// ESSENCIAL: Middleware JSON
+app.use(express.json());
+
+// Dados em memória
+let produtos = [
+    { id: 1, nome: "pacific ring", preco: 17, genero: "acao" },
+    { id: 2, nome: "o rei ", preco: 1132, genero: "vida real" },
+    { id: 3, nome: "coroa", preco: 17, genero: "acao" },
+    { id: 4, nome: "o rei sem coroa", preco: 4, genero: "drama" },
+    { id: 5, nome: "do carabi", preco: 127, genero: "acao" },
+    { id: 6, nome: "piradas ", preco: 11, genero: "aventura" },
+    { id: 7, nome: "piradas do carabi", preco: 177, genero: "acaoooo" },
+    { id: 8, nome: "em terra de cego quem enxerga e rei", preco: 7, genero: "cao" },
+    { id: 9, nome: "ring", preco: 1, genero: "aca" },
+    { id: 10, nome: "pacific", preco: 17, genero: "acao" }
+];
+
+let proximoId =  11; // Controla próximo ID
+
+// POST /api/locadora - Criar novo produto
+app.post('/api/locadora', (req, res) => {
+    // 1. Extrair dados do body
+    const { nome, preco, genero } = req.body;
+    
+    // 2. VALIDAÇÕES - Campos obrigatórios
+    if (!nome || !preco || !genero) {
+        return res.status(400).json({
+            erro: "Campos obrigatórios: nome, preco, genero"
+        });
+    }
+    
+    // 3. VALIDAÇÕES - Tipo de dado
+    if (typeof preco !== 'number') {
+        return res.status(400).json({
+            erro: "Preço deve ser um número"
+        });
+    }
+    
+    // 4. VALIDAÇÕES - Regra de negócio (preço positivo)
+    if (preco <= 0) {
+        return res.status(400).json({
+            erro: "Preço deve ser maior que zero"
+        });
+    }
+    
+    // 5. VALIDAÇÕES - Tamanho mínimo
+    if (nome.length < 3) {
+        return res.status(400).json({
+            erro: "Nome deve ter pelo menos 3 caracteres"
+        });
+    }
+    
+    // 6. Se passou em TODAS as validações, criar produto
+    const novoProduto = {
+        id: proximoId++,
+        nome,
+        preco,
+        genero
+    };
+    
+    // 7. Adicionar ao array
+    produtos.push(novoProduto);
+    
+    // 8. Retornar sucesso com 201 Created
+    res.status(201).json(novoProduto);
+});
+
+app.listen(3001, () => console.log('🚀 API na porta 3001'));
+
+// GET /api/locadora - Listar todos
+app.get('/api/locadora', (req, res) => {
+    // Retorna o array completo
+    res.json(produtos);
+});
+
+// GET /api/locadora/:id - Buscar por ID
+app.get('/api/locadora/:id', (req, res) => {
+    const produto = produtos.find(p => p.id === parseInt(req.params.id));
+    if (!produto) return res.status(404).json({ erro: "Não encontrado" });
+    res.json(produto);
+});
+
+// PUT /api/locadora/:id - Atualizar produto
+app.put('/api/locadora/:id', (req, res) => {
+    // 1. Pegar ID da URL
+    const id = parseInt(req.params.id);
+    
+    // 2. Buscar produto no array
+    const produto = produtos.find(p => p.id === id);
+    
+    // 3. Verificar se existe
+    if (!produto) {
+        return res.status(404).json({ 
+            erro: "Produto não encontrado" 
+        });
+    }
+    
+    // 4. Extrair dados do body
+    const { nome, preco, genero } = req.body;
+    
+    // 5. VALIDAÇÕES (igual ao POST!)
+    if (!nome || !preco || !genero) {
+        return res.status(400).json({
+            erro: "Campos obrigatórios: nome, preco, genero"
+        });
+    }
+    
+    if (typeof preco !== 'number' || preco <= 0) {
+        return res.status(400).json({
+            erro: "Preço deve ser um número positivo"
+        });
+    }
+    
+    // 6. Atualizar campos do produto
+    produto.nome = nome;
+    produto.preco = preco;
+    produto.genero = genero;
+    
+    // 7. Retornar produto atualizado com 200 OK
+    res.json(produto);
+});
+
+// DELETE /api/locadora/:id - Remover produto
+app.delete('/api/locadora/:id', (req, res) => {
+    // 1. Pegar ID da URL
+    const id = parseInt(req.params.id);
+    
+    // 2. Encontrar índice do produto no array
+    const index = produtos.findIndex(p => p.id === id);
+    
+    // 3. Verificar se existe
+    if (index === -1) {
+        return res.status(404).json({ 
+            erro: "Produto não encontrado" 
+        });
+    }
+    
+    // 4. Remover do array
+    produtos.splice(index, 1);
+    
+    // 5. Retornar 204 No Content (sem body!)
+    res.status(204).send();
+});
