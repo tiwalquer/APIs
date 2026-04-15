@@ -1,0 +1,67 @@
+{
+  "info": {
+    "_postman_id": "3f018cde-458f-4711-86d0-1b22bf497ba6",
+    "name": "Trabalho",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53758879",
+    "_collection_link": "https://go.postman.co/collection/53758879-3f018cde-458f-4711-86d0-1b22bf497ba6?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get data",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Post data",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Put data",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "delete data",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Get filtro",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Get paginacao",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Get ordenado",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
