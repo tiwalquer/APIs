@@ -1,5 +1,8 @@
-para criar um banco de dados crie um novo arquivo na pasta da sua API, e insira esse codigo 
+vantagens de ter um banco de dados:
+toda vez que voce dava um push em algo ele durava penas durante a exucucao do seu codigo( como escrever na areia, vai embora facil), agora com um banco de dados, 
+mesmo apos terminar a execucao quando voce iniciar denovo todos os seus push estaram la (como escrever em uma pedra)  
 
+para criar um banco de dados crie um novo arquivo na pasta da sua API, e insira esse codigo 
 
 // database.js
 const Database = require('better-sqlite3'); 
