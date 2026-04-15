@@ -1,5 +1,8 @@
 seguei o codigo para criar uma API CRUD (sem banco de dados), com isso voce tera a sua primeira API funcional
 
+coloque esse codigo no VS code, no arquivo principal no meu caso'index.js' 
+para utilizar de suas funcionalidades abra o 'postman' crie uma nova colecao, crie um request qualquer e insira a URL do seu projeto nesse caso é 'http://localhost:3001/api/locadora' caso mais duvidas sobre o postman consulte o nosso repositorio do postman
+
 esse codigo contem 10 registros automaticos e um incremento de ID, existem 4 campos na tabela, (ID, nome, preco, genero) com validor se eles foram devidamente inseridos/ suas regras de negocio
 --------------------------------------------------------------
 
