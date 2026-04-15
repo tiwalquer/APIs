@@ -1,0 +1,36 @@
+para baixar o  postman: 'https://www.postman.com'
+
+apos voce ja ter a sua API na mao oque voce deve fazer é executar o codigo, com o codigo rodando pega o seu endpoint, ela sera composta por tipo usado que como vai trazer as informacoes , a onde voce quer acessar/dominio e oque voce quer acessar,  caso esteja fazendo 
+apenas para voce e ele roda apenas na sua maquina ele provavelmente fica algo parecido com isso, 'http://localhost/api/ ' o http sendo como comunica ,/ o servidor ,/ o que quer acessar .
+
+no postman é importante colocar um script no seus requests, pois assim a comunicacao de um erro, acao/acerto, ficara bem mais facil para entender tanto para voce tanto quanto para as outras pessoas. Seguei lista
+
+GET (Read) //nao tem body
+200 OK → Requisição bem-sucedida e retornou dados 
+204 No Content → Sucesso, mas sem conteúdo (ex: lista vazia)
+404 Not Found → Recurso não encontrado
+400 Bad Request → Parâmetros inválidos
+
+POST (Create) //tem body
+201 Created → Recurso criado com sucesso ✅
+400 Bad Request → Dados inválidos
+409 Conflict → Conflito (ex: recurso já existe)
+
+PUT / PATCH (Update) // tem body
+200 OK → Atualização com retorno de dados
+204 No Content → Atualizou sem retornar conteúdo
+400 Bad Request → Dados inválidos
+404 Not Found → Recurso não encontrado
+
+DELETE //geralmente nao tem body
+204 No Content → Removido com sucesso (mais comum) 🗑️
+200 OK → Removido com retorno (ex: mensagem)
+404 Not Found → Recurso não encontrado
+
+
+Códigos gerais importantes
+401 Unauthorized → Não autenticado
+403 Forbidden → Sem permissão
+500 Internal Server Error → Erro no servidor
+422 Unprocessable Entity → Dados válidos, porem fere alguma regra de negocio, condicao de existencia ou voce nao informou um valor de um campo obrigatorio
+
