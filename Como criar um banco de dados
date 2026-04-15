@@ -1,0 +1,26 @@
+para criar um banco de dados crie um novo arquivo na pasta da sua API, e insira esse codigo 
+
+
+// database.js
+const Database = require('better-sqlite3'); 
+// Criar/abrir banco de dados
+const db = new Database('locadoraTiagao.db');
+
+// Criar tabela se não existir
+const createTableSQL = ` 
+    CREATE TABLE IF NOT EXISTS locadoraTiagao (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome VARCHAR(100) NOT NULL,
+        preco DECIMAL(10,2) NOT NULL,
+        genero VARCHAR(50) NOT NULL,
+        estoque INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+`;
+
+db.exec(createTableSQL);
+
+console.log('✅ Banco de dados conectado!');
+
+// Exportar para usar em outros arquivos
+module.exports = db;
